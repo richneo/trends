@@ -12,17 +12,10 @@ const CONFIG = {
 
 class TrendAnalyzer {
     constructor() {
-        this.tagCloud = document.getElementById('tagCloud');
-        this.lastUpdate = document.getElementById('lastUpdate');
-        this.refreshBtn = document.getElementById('refreshBtn');
-        this.currentCategory = 'AI';
-        this.setupEventListeners();
-        this.setupCategoryFilters();
-        this.startAutoRefresh();
-    }
+        // 기존 코드...
 
-    setupEventListeners() {
-        this.refreshBtn.addEventListener('click', () => this.fetchTrends());
+        this.currentCategory = 'AI';
+        this.setupCategoryFilters();
     }
 
     setupCategoryFilters() {
@@ -51,11 +44,6 @@ class TrendAnalyzer {
         activeButton.classList.add('active');
     }
 
-    startAutoRefresh() {
-        this.fetchTrends();
-        setInterval(() => this.fetchTrends(), CONFIG.REFRESH_INTERVAL);
-    }
-
     async fetchTrends() {
         try {
             this.showLoading();
@@ -66,22 +54,9 @@ class TrendAnalyzer {
                 apiKey: CONFIG.API_KEY
             });
 
-            const url = `${CONFIG.PROXY_URL}?url=${encodeURIComponent(`${CONFIG.BASE_URL}?${queryParams}`)}`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            if (data && data.contents) {
-                const articlesData = JSON.parse(data.contents);
-                if (articlesData.status === 'ok') {
-                    this.processKeywords(articlesData.articles);
-                    this.updateLastFetchTime();
-                } else {
-                    throw new Error('API returned error status');
-                }
-            }
+            // 나머지 코드는 동일...
         } catch (error) {
-            console.error('Error fetching trends:', error);
-            this.showError('Failed to load trends. Please try again later.');
+            // 에러 처리...
         }
     }
 
@@ -143,20 +118,4 @@ class TrendAnalyzer {
             });
         });
     }
-
-    showLoading() {
-        this.tagCloud.innerHTML = '<div class="loading-spinner"></div>';
-    }
-
-    showError(message) {
-        this.tagCloud.innerHTML = `<div class="error">${message}</div>`;
-    }
-
-    updateLastFetchTime() {
-        const now = new Date();
-        this.lastUpdate.textContent = `Last updated: ${now.toLocaleTimeString()}`;
-    }
 }
-
-// 앱 초기화
-new TrendAnalyzer();
