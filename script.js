@@ -35,7 +35,7 @@ function processKeywords(articles) {
 
             allWords.forEach(word => {
                 const keyword = word.toLowerCase();
-                if (keyword.length > 2) { // 불용어 필터링 제거
+                if (keyword.length > 1) { // 불용어 필터링을 1로 조정
                     keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
                 }
             });
@@ -48,6 +48,7 @@ function processKeywords(articles) {
     const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
     displayTagCloud(sortedKeywords.slice(0, 20));
 }
+
 
 
 function displayTagCloud(keywords) {
