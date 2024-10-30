@@ -32,22 +32,16 @@ async function fetchTrends() {
 
 function processKeywords(articles) {
     const keywordCount = {};
+    const stopWords = new Set(['the', 'and', 'is', 'a', 'to', 'of', 'in', 'for', 'on', 'with']); // 불용어 리스트
 
     articles.forEach(article => {
-        if (article && article.title) { // article이 null이 아닌지 확인
-            const words = article.title.split(' ');
-            words.forEach(word => {
+        if (article) {
+            const titleWords = article.title ? article.title.split(' ') : [];
+            const descriptionWords = article.description ? article.description.split(' ') : [];
+
+            [...titleWords, ...descriptionWords].forEach(word => {
                 const keyword = word.toLowerCase();
-                if (keyword.length > 2) {
-                    keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
-                }
-            });
-        }
-        if (article && article.description) { // description도 null 체크
-            const words = article.description.split(' ');
-            words.forEach(word => {
-                const keyword = word.toLowerCase();
-                if (keyword.length > 2) {
+                if (keyword.length > 2 && !stopWords.has(keyword)) {
                     keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
                 }
             });
@@ -60,6 +54,7 @@ function processKeywords(articles) {
     const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
     displayTagCloud(sortedKeywords.slice(0, 20));
 }
+
 
 
 
