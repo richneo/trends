@@ -3,6 +3,7 @@ const apiKey = '0fd813c8b6174b2ab21232034e78ec86';  // 여기에 News API 키를
 // const apiUrl = `https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`;
 const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`)}`;
 
+/*
 async function fetchTrends() {
   try {
     const response = await fetch(apiUrl);
@@ -17,6 +18,27 @@ async function fetchTrends() {
     document.getElementById('tagCloud').innerText = 'Error loading trends';
   }
 }
+*/
+
+async function fetchTrends() {
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    // allorigins 프록시의 "contents" 필드를 JSON으로 파싱
+    const articlesData = JSON.parse(data.contents);
+
+    if (articlesData.status === 'ok') {
+      processKeywords(articlesData.articles);
+    } else {
+      document.getElementById('tagCloud').innerText = 'Failed to fetch trends';
+    }
+  } catch (error) {
+    console.error('Error fetching trends:', error);
+    document.getElementById('tagCloud').innerText = 'Error loading trends';
+  }
+}
+
 
 function processKeywords(articles) {
   // 기사에서 키워드 추출
