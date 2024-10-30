@@ -25,6 +25,9 @@ async function fetchTrends() {
     const response = await fetch(apiUrl);
     const data = await response.json();
 
+    // 데이터 확인용 console.log
+    console.log(data.contents); // 여기서 데이터 구조를 확인하세요
+
     // allorigins 프록시의 "contents" 필드를 JSON으로 파싱
     const articlesData = JSON.parse(data.contents);
 
