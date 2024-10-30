@@ -46,7 +46,7 @@ async function fetchTrends() {
   }
 }
 
-
+/*
 function processKeywords(articles) {
   // 기사에서 키워드 추출
   const keywordCount = {};
@@ -64,6 +64,28 @@ function processKeywords(articles) {
   const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
   displayTagCloud(sortedKeywords.slice(0, 20));
 }
+*/
+
+function processKeywords(articles) {
+  const keywordCount = {};
+  
+  articles.forEach(article => {
+    if (article.title) { // title이 null이 아닌 경우에만
+      const words = article.title.split(' ');
+      words.forEach(word => {
+        const keyword = word.toLowerCase();
+        if (keyword.length > 2) {
+          keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+        }
+      });
+    }
+  });
+
+  // 빈도 순으로 키워드 정렬 후 상위 키워드만 태그 클라우드로 표시
+  const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
+  displayTagCloud(sortedKeywords.slice(0, 20));
+}
+
 
 function displayTagCloud(keywords) {
   const tagCloud = document.getElementById('tagCloud');
