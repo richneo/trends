@@ -35,9 +35,10 @@ async function fetchTrends() {
 
 function processKeywords(articles) {
   const keywordCount = {};
-
+  
   articles.forEach(article => {
-    if (article.title) { // title이 null이 아닌 경우에만
+    // 제목에서 키워드 추출
+    if (article.title) {
       const words = article.title.split(' ');
       words.forEach(word => {
         const keyword = word.toLowerCase();
@@ -47,7 +48,8 @@ function processKeywords(articles) {
       });
     }
 
-    if (article.description) { // description이 null이 아닌 경우에만
+    // 설명에서 키워드 추출
+    if (article.description) {
       const words = article.description.split(' ');
       words.forEach(word => {
         const keyword = word.toLowerCase();
@@ -61,10 +63,10 @@ function processKeywords(articles) {
   console.log(`Total articles: ${articles.length}`);
   console.log(`Extracted keywords: ${Object.keys(keywordCount).length}`);
 
-  // 빈도 순으로 키워드 정렬 후 상위 키워드만 태그 클라우드로 표시
   const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
   displayTagCloud(sortedKeywords.slice(0, 20));
 }
+
 
 
 
