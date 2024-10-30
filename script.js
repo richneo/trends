@@ -1,7 +1,9 @@
 // 설정: News API를 이용해 기술 관련 트렌드 키워드 추출
 const apiKey = '0fd813c8b6174b2ab21232034e78ec86';  // 여기에 News API 키를 입력하세요.
 // const apiUrl = `https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`;
-const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`)}`;
+// const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`)}`;
+const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=latest+technology&language=en&sortBy=publishedAt&apiKey=${apiKey}`)}`;
+
 
 /*
 async function fetchTrends() {
@@ -33,6 +35,7 @@ async function fetchTrends() {
     console.log(articlesData); // 파싱된 JSON 로그
 
     if (articlesData.status === 'ok') {
+      console.log(articlesData.articles); // 기사 목록 로그
       processKeywords(articlesData.articles);
     } else {
       document.getElementById('tagCloud').innerText = 'Failed to fetch trends';
@@ -51,7 +54,7 @@ function processKeywords(articles) {
     const words = article.title.split(' ');
     words.forEach(word => {
       const keyword = word.toLowerCase();
-      if (keyword.length > 3) {
+      if (keyword.length > 2) {
         keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
       }
     });
