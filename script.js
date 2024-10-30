@@ -8,64 +8,59 @@ const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https:/
 
 
 async function fetchTrends() {
-  try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        console.log(data.contents); // 데이터 구조 확인
+        const articlesData = JSON.parse(data.contents);
+        console.log(articlesData); // 파싱된 JSON 로그
 
-    // 데이터 확인용 console.log
-    console.log(data.contents); // 여기서 데이터 구조를 확인하세요
-
-    // allorigins 프록시의 "contents" 필드를 JSON으로 파싱
-    const articlesData = JSON.parse(data.contents);
-    console.log(articlesData); // 파싱된 JSON 로그
-
-    if (articlesData.status === 'ok') {
-      console.log(articlesData.articles); // 기사 목록 로그
-      processKeywords(articlesData.articles);
-    } else {
-      document.getElementById('tagCloud').innerText = 'Failed to fetch trends';
+        if (articlesData.status === 'ok') {
+            console.log(articlesData.articles); // 기사 목록 로그
+            processKeywords(articlesData.articles);
+        } else {
+            document.getElementById('tagCloud').innerText = 'Failed to fetch trends';
+        }
+    } catch (error) {
+        console.error('Error fetching trends:', error);
+        document.getElementById('tagCloud').innerText = 'Error loading trends';
     }
-  } catch (error) {
-    console.error('Error fetching trends:', error);
-    document.getElementById('tagCloud').innerText = 'Error loading trends';
-  }
 }
+
 
 
 
 function processKeywords(articles) {
-  const keywordCount = {};
-  
-  articles.forEach(article => {
-    // 제목에서 키워드 추출
-    if (article.title) {
-      const words = article.title.split(' ');
-      words.forEach(word => {
-        const keyword = word.toLowerCase();
-        if (keyword.length > 2) {
-          keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+    const keywordCount = {};
+
+    articles.forEach(article => {
+        if (article && article.title) { // article이 null이 아닌지 확인
+            const words = article.title.split(' ');
+            words.forEach(word => {
+                const keyword = word.toLowerCase();
+                if (keyword.length > 2) {
+                    keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+                }
+            });
         }
-      });
-    }
-
-    // 설명에서 키워드 추출
-    if (article.description) {
-      const words = article.description.split(' ');
-      words.forEach(word => {
-        const keyword = word.toLowerCase();
-        if (keyword.length > 2) {
-          keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+        if (article && article.description) { // description도 null 체크
+            const words = article.description.split(' ');
+            words.forEach(word => {
+                const keyword = word.toLowerCase();
+                if (keyword.length > 2) {
+                    keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+                }
+            });
         }
-      });
-    }
-  });
+    });
 
-  console.log(`Total articles: ${articles.length}`);
-  console.log(`Extracted keywords: ${Object.keys(keywordCount).length}`);
+    console.log(`Total articles: ${articles.length}`);
+    console.log(`Extracted keywords: ${Object.keys(keywordCount).length}`);
 
-  const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
-  displayTagCloud(sortedKeywords.slice(0, 20));
+    const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
+    displayTagCloud(sortedKeywords.slice(0, 20));
 }
+
 
 
 
