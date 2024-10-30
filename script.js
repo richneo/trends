@@ -8,21 +8,25 @@ async function fetchTrends() {
     try {
         const response = await fetch(apiUrl);
         const data = await response.json();
-        console.log(data.contents); // 데이터 구조 확인
-        const articlesData = JSON.parse(data.contents);
-        console.log(articlesData); // 파싱된 JSON 로그
-
-        if (articlesData.status === 'ok') {
-            console.log(articlesData.articles); // 기사 목록 로그
-            processKeywords(articlesData.articles);
+        
+        // 데이터가 정상인지 확인
+        if (data && data.contents) {
+            const articlesData = JSON.parse(data.contents);
+            if (articlesData.status === 'ok') {
+                console.log(articlesData.articles);
+                processKeywords(articlesData.articles);
+            } else {
+                document.getElementById('tagCloud').innerText = 'Failed to fetch trends';
+            }
         } else {
-            document.getElementById('tagCloud').innerText = 'Failed to fetch trends';
+            throw new Error('Invalid data structure');
         }
     } catch (error) {
         console.error('Error fetching trends:', error);
         document.getElementById('tagCloud').innerText = 'Error loading trends';
     }
 }
+
 
 function processKeywords(articles) {
     const keywordCount = {};
@@ -31,11 +35,11 @@ function processKeywords(articles) {
         if (article) {
             const titleWords = article.title ? article.title.split(' ') : [];
             const descriptionWords = article.description ? article.description.split(' ') : [];
-            const allWords = [...titleWords, ...descriptionWords]; // 제목과 설명의 단어 모두 결합
+            const allWords = [...titleWords, ...descriptionWords];
 
             allWords.forEach(word => {
                 const keyword = word.toLowerCase();
-                if (keyword.length > 1) { // 불용어 필터링을 1로 조정
+                if (keyword.length > 2) { // 필터링 조건
                     keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
                 }
             });
@@ -48,6 +52,7 @@ function processKeywords(articles) {
     const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
     displayTagCloud(sortedKeywords.slice(0, 20));
 }
+
 
 
 
