@@ -81,6 +81,10 @@ function processKeywords(articles) {
     }
   });
 
+  console.log(`Total articles: ${articles.length}`);
+  console.log(`Extracted keywords: ${Object.keys(keywordCount).length}`);
+
+
   // 빈도 순으로 키워드 정렬 후 상위 키워드만 태그 클라우드로 표시
   const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
   displayTagCloud(sortedKeywords.slice(0, 20));
