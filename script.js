@@ -1,6 +1,7 @@
 // 설정: News API를 이용해 기술 관련 트렌드 키워드 추출
 const apiKey = '0fd813c8b6174b2ab21232034e78ec86';  // 여기에 News API 키를 입력하세요.
-const apiUrl = `https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`;
+// const apiUrl = `https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`;
+const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`)}`;
 
 async function fetchTrends() {
   try {
