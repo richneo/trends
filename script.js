@@ -1,11 +1,6 @@
-// 설정: News API를 이용해 기술 관련 트렌드 키워드 추출
+// 설정: News API를 이용해 AI 관련 트렌드 키워드 추출
 const apiKey = '0fd813c8b6174b2ab21232034e78ec86';  // 여기에 News API 키를 입력하세요.
-// const apiUrl = `https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`;
-// const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=technology&language=en&apiKey=${apiKey}`)}`;
-const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=latest+technology&language=en&sortBy=publishedAt&apiKey=${apiKey}`)}`;
-
-
-
+const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=latest+ai&language=en&sortBy=publishedAt&apiKey=${apiKey}`)}`;
 
 async function fetchTrends() {
     try {
@@ -26,9 +21,6 @@ async function fetchTrends() {
         document.getElementById('tagCloud').innerText = 'Error loading trends';
     }
 }
-
-
-
 
 function processKeywords(articles) {
     const keywordCount = {};
@@ -55,21 +47,16 @@ function processKeywords(articles) {
     displayTagCloud(sortedKeywords.slice(0, 20));
 }
 
-
-
-
-
-
 function displayTagCloud(keywords) {
-  const tagCloud = document.getElementById('tagCloud');
-  tagCloud.innerHTML = '';
-  keywords.forEach(keyword => {
-    const span = document.createElement('span');
-    span.className = 'keyword';
-    span.innerText = keyword;
-    span.onclick = () => window.open(`https://www.google.com/search?q=${keyword}+technology`, '_blank');
-    tagCloud.appendChild(span);
-  });
+    const tagCloud = document.getElementById('tagCloud');
+    tagCloud.innerHTML = '';
+    keywords.forEach(keyword => {
+        const span = document.createElement('span');
+        span.className = 'keyword';
+        span.innerText = keyword;
+        span.onclick = () => window.open(`https://www.google.com/search?q=${keyword}+ai`, '_blank');
+        tagCloud.appendChild(span);
+    });
 }
 
 // 실행
