@@ -30,6 +30,7 @@ async function fetchTrends() {
 
     // allorigins 프록시의 "contents" 필드를 JSON으로 파싱
     const articlesData = JSON.parse(data.contents);
+    console.log(articlesData); // 파싱된 JSON 로그
 
     if (articlesData.status === 'ok') {
       processKeywords(articlesData.articles);
