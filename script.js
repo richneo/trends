@@ -5,22 +5,7 @@ const apiKey = '0fd813c8b6174b2ab21232034e78ec86';  // 여기에 News API 키를
 const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(`https://newsapi.org/v2/everything?q=latest+technology&language=en&sortBy=publishedAt&apiKey=${apiKey}`)}`;
 
 
-/*
-async function fetchTrends() {
-  try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    if (data.status === 'ok') {
-      processKeywords(data.articles);
-    } else {
-      document.getElementById('tagCloud').innerText = 'Failed to fetch trends';
-    }
-  } catch (error) {
-    console.error('Error fetching trends:', error);
-    document.getElementById('tagCloud').innerText = 'Error loading trends';
-  }
-}
-*/
+
 
 async function fetchTrends() {
   try {
@@ -46,32 +31,24 @@ async function fetchTrends() {
   }
 }
 
-/*
-function processKeywords(articles) {
-  // 기사에서 키워드 추출
-  const keywordCount = {};
-  articles.forEach(article => {
-    const words = article.title.split(' ');
-    words.forEach(word => {
-      const keyword = word.toLowerCase();
-      if (keyword.length > 2) {
-        keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
-      }
-    });
-  });
 
-  // 빈도 순으로 키워드 정렬 후 상위 키워드만 태그 클라우드로 표시
-  const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
-  displayTagCloud(sortedKeywords.slice(0, 20));
-}
-*/
 
 function processKeywords(articles) {
   const keywordCount = {};
-  
+
   articles.forEach(article => {
     if (article.title) { // title이 null이 아닌 경우에만
       const words = article.title.split(' ');
+      words.forEach(word => {
+        const keyword = word.toLowerCase();
+        if (keyword.length > 2) {
+          keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+        }
+      });
+    }
+
+    if (article.description) { // description이 null이 아닌 경우에만
+      const words = article.description.split(' ');
       words.forEach(word => {
         const keyword = word.toLowerCase();
         if (keyword.length > 2) {
@@ -84,11 +61,11 @@ function processKeywords(articles) {
   console.log(`Total articles: ${articles.length}`);
   console.log(`Extracted keywords: ${Object.keys(keywordCount).length}`);
 
-
   // 빈도 순으로 키워드 정렬 후 상위 키워드만 태그 클라우드로 표시
   const sortedKeywords = Object.keys(keywordCount).sort((a, b) => keywordCount[b] - keywordCount[a]);
   displayTagCloud(sortedKeywords.slice(0, 20));
 }
+
 
 
 function displayTagCloud(keywords) {
